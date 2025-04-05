@@ -24,6 +24,13 @@ public class Notes {
     @JoinColumn(name = "id_usuario", nullable = false)
     private User Usuario;
 
+    public Notes(String title, List<String> tags, String contenido, User usuario) {
+        this.title = title;
+        this.tags = tags;
+        this.contenido = contenido;
+        Usuario = usuario;
+    }
+
     public Long getId() {
         return id;
     }

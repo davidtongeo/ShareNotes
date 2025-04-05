@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.david.shareNotes.entities.User;
 import com.david.shareNotes.repositories.UserRepository;
+import com.david.shareNotes.types.returnableUser;
 import com.david.shareNotes.types.userParam;
 
 @Service
@@ -14,20 +15,29 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    public User saveUser(User user) {
+    public returnableUser saveUser(User user) {
         if (user == null)
             throw new Error("The user was null");
         if (userRepo.findByEmailAdress(user.getEmail()).size() > 0)
             throw new Error("The email is already signed.");
-        return userRepo.save(user);
+        try {
+            User repoUser = userRepo.save(user);
+            return new returnableUser(repoUser.getName(), repoUser.getId());
+        } catch (Exception e) {
+            throw new Error("INTERNAL SERVER ERROR, couldn't save to the database.");
+        }
     }
 
-    public User authLoggin(userParam user) {
+    public returnableUser authLoggin(userParam user) {
         if (user == null)
-            throw new Error("The user was null");
-        User findedUser = userRepo.findUser(user.getEmail(), user.getPassword());
-        if (findedUser == null)
-            throw new Error("No user was found.");
-        return findedUser;
+            throw new Error("The user was null.");
+        try {
+            User foundedUser = userRepo.findUser(user.getEmail(), user.getPassword());
+            if (foundedUser == null)
+                throw new Error("No user was found.");
+            return new returnableUser(foundedUser.getName(), foundedUser.getId());
+        } catch (Exception e) {
+            throw new Error("couldn't log-in.");
+        }
     }
 }

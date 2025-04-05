@@ -1,5 +1,6 @@
 package com.david.shareNotes.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import com.david.shareNotes.entities.Notes;
 import com.david.shareNotes.repositories.NoteRepository;
 import com.david.shareNotes.repositories.UserRepository;
 import com.david.shareNotes.types.notesParam;
+import com.david.shareNotes.types.returnableNote;
 
 @Service
 public class NoteService {
@@ -19,35 +21,39 @@ public class NoteService {
         this.noteRepo = noteRepo;
     }
 
-    public Notes saveNote(notesParam note) {
-        Notes cNote = new Notes();
-        cNote.setContenido(note.getContenido());
-        cNote.setTitle(note.getTitle());
-        cNote.setTags(note.getTags());
+    public returnableNote saveNote(notesParam note) {
         try {
-            cNote.setUsuario(userRepo.findById(note.getUser_id()).get());
-            // hide User
-            Notes rNote = noteRepo.save(cNote);
-            rNote.setUsuario(null);
-            return rNote;
+            Notes cNote = new Notes(note.getTitle(), note.getTags(), note.getContenido(),
+                    userRepo.findById(note.getUser_id()).get());
+            // Make the retornable Note
+            Notes repoNote = noteRepo.save(cNote);
+            returnableNote retNote = new returnableNote(repoNote.getTitle(), repoNote.getContenido(),
+                    repoNote.getTags());
+            return retNote;
         } catch (Error e) {
             throw new Error("Couldn't make the Note entity");
         }
     }
 
-    public List<Notes> getAllNotes() {
-        List<Notes> notes = noteRepo.findAll();
-        for (Notes note : notes) {
-            note.setUsuario(null);
+    public List<returnableNote> getAllNotes() {
+        try {
+            List<Notes> notes = noteRepo.findAll();
+            List<returnableNote> listRetNotes = new ArrayList<returnableNote>();
+            // for every note we'll make a retNote object that we can show to the client.
+            for (Notes note : notes) {
+                returnableNote rNote = new returnableNote(note.getTitle(), note.getContenido(), note.getTags());
+                listRetNotes.add(rNote);
+            }
+            return listRetNotes;
+        } catch (Error e) {
+            throw new Error("INTERNAL SERVER ERROR, CANT FIND ANY NOTES");
         }
-        return notes;
     }
 
-    public Notes getNoteById(Long id) {
+    public returnableNote getNoteById(Long id) {
         try {
             Notes note = noteRepo.findById(id).get();
-            note.setUsuario(null);
-            return note;
+            return new returnableNote(note.getTitle(), note.getContenido(), note.getTags());
         } catch (Error e) {
             throw new Error("couldn't find the note by the id");
         }
@@ -61,22 +67,28 @@ public class NoteService {
         }
     }
 
-    public Notes updateNote(Long id, notesParam note) {
+    public returnableNote updateNote(Long id, notesParam note) {
         try {
-            Notes rNote = noteRepo.findById(id).get();
-            rNote.setTitle(note.getTitle());
-            rNote.setContenido(note.getContenido());
-            rNote.setTags(note.getTags());
-            return noteRepo.save(rNote);
+            Notes repoNote = noteRepo.findById(id).get();
+            repoNote.setTitle(note.getTitle());
+            repoNote.setContenido(note.getContenido());
+            repoNote.setTags(note.getTags());
+            Notes savedNode = noteRepo.save(repoNote);
+            return new returnableNote(savedNode.getTitle(), savedNode.getContenido(), savedNode.getTags());
         } catch (Error e) {
-            throw new Error("");
+            throw new Error("Couldn't update the note for the id: " + id);
         }
     }
 
     // find by Tag
-    public List<Notes> findByTag(List<String> tags) {
+    public List<returnableNote> findByTag(List<String> tags) {
         try {
-            return noteRepo.findByTags(tags);
+            List<Notes> notes = noteRepo.findByTags(tags);
+            List<returnableNote> listRetNotes = new ArrayList<returnableNote>();
+            for (Notes note : notes) {
+                listRetNotes.add(new returnableNote(note.getTitle(), note.getContenido(), note.getTags()));
+            }
+            return listRetNotes;
         } catch (Error e) {
             throw new Error("Couldn't find by tag");
         }

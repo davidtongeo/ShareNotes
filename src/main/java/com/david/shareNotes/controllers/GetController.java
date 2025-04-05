@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.david.shareNotes.entities.Notes;
 import com.david.shareNotes.services.NoteService;
 import com.david.shareNotes.types.notesParam;
+import com.david.shareNotes.types.returnableNote;
 
 @RestController
 public class GetController {
@@ -26,14 +26,14 @@ public class GetController {
         if (note == null) {
             // No parameters were found.
             try {
-                List<Notes> notes = noteService.getAllNotes();
+                List<returnableNote> notes = noteService.getAllNotes();
                 return ResponseEntity.status(HttpStatus.FOUND).body(notes);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
             }
         } else {
             try {
-                List<Notes> notes = noteService.findByTag(note.getTags());
+                List<returnableNote> notes = noteService.findByTag(note.getTags());
                 return ResponseEntity.status(HttpStatus.FOUND).body(notes);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
@@ -44,7 +44,7 @@ public class GetController {
     @GetMapping("/notes/{id}")
     public ResponseEntity<Object> getSingleNote(@PathVariable Long id) {
         try {
-            Notes note = noteService.getNoteById(id);
+            returnableNote note = noteService.getNoteById(id);
             return ResponseEntity.status(HttpStatus.FOUND).body(note);
         } catch (Exception e) {
             // TODO: handle exception
