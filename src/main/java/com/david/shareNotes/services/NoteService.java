@@ -23,30 +23,39 @@ public class NoteService {
         Notes cNote = new Notes();
         cNote.setContenido(note.getContenido());
         cNote.setTitle(note.getTitle());
+        cNote.setTags(note.getTags());
         try {
             cNote.setUsuario(userRepo.findById(note.getUser_id()).get());
-            return noteRepo.save(cNote);
+            // hide User
+            Notes rNote = noteRepo.save(cNote);
+            rNote.setUsuario(null);
+            return rNote;
         } catch (Error e) {
             throw new Error("Couldn't make the Note entity");
         }
     }
 
     public List<Notes> getAllNotes() {
-        return noteRepo.findAll();
+        List<Notes> notes = noteRepo.findAll();
+        for (Notes note : notes) {
+            note.setUsuario(null);
+        }
+        return notes;
     }
 
     public Notes getNoteById(Long id) {
         try {
-            return noteRepo.findById(id).get();
+            Notes note = noteRepo.findById(id).get();
+            note.setUsuario(null);
+            return note;
         } catch (Error e) {
             throw new Error("couldn't find the note by the id");
         }
     }
 
-    public String deleteNote(Long id) {
+    public void deleteNote(Long id) {
         try {
             noteRepo.deleteById(id);
-            return "Deleted!";
         } catch (Error e) {
             throw new Error("Couldn't find the note id, therefore it cant delete it");
         }
@@ -57,9 +66,19 @@ public class NoteService {
             Notes rNote = noteRepo.findById(id).get();
             rNote.setTitle(note.getTitle());
             rNote.setContenido(note.getContenido());
+            rNote.setTags(note.getTags());
             return noteRepo.save(rNote);
         } catch (Error e) {
             throw new Error("");
+        }
+    }
+
+    // find by Tag
+    public List<Notes> findByTag(List<String> tags) {
+        try {
+            return noteRepo.findByTags(tags);
+        } catch (Error e) {
+            throw new Error("Couldn't find by tag");
         }
     }
 }

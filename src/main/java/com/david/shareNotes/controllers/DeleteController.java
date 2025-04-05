@@ -1,5 +1,7 @@
 package com.david.shareNotes.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +17,13 @@ public class DeleteController {
     }
 
     @DeleteMapping("notes/{id}")
-    public String deleteNote(@PathVariable Long id) {
-        return noteService.deleteNote(id);
+    public ResponseEntity<Object> deleteNote(@PathVariable Long id) {
+        try {
+            noteService.deleteNote(id);
+            return ResponseEntity.status(HttpStatus.CREATED).body("");
+        } catch (Error e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
+        // return noteService.deleteNote(id);
     }
 }

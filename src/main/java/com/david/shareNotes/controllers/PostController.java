@@ -1,6 +1,7 @@
 package com.david.shareNotes.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,39 +25,38 @@ public class PostController {
     }
 
     @PostMapping("/loggin")
-    // TODO: we need to have some form of body which will have the neccesary info to
-    // loggin
-    public User performLoggin(@RequestBody userParam body) {
+    // TODO: near future try to retrieve jwt
+    public ResponseEntity<Object> performLoggin(@RequestBody userParam body) {
         try {
-            return userService.authLoggin(body);
+            User user = userService.authLoggin(body);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (Error e) {
-            // TODO: make a proper error message;
-            throw new Error("");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 
     @PostMapping("/note")
-    public Notes saveNote(@RequestBody notesParam note) {
+    public ResponseEntity<Object> saveNote(@RequestBody notesParam note) {
         try {
-            return noteService.saveNote(note);
+            Notes rNote = noteService.saveNote(note);
+            return ResponseEntity.status(HttpStatus.CREATED).body(rNote);
         } catch (Error e) {
-            // TODO: make a proper error message;
-            throw new Error("");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 
     @PostMapping("/register")
-    public User saveUser(@RequestBody userParam body) {
+    public ResponseEntity<Object> saveUser(@RequestBody userParam body) {
         User user = new User();
         // init
         user.setName(body.getName());
         user.setPassword(body.getPassword());
         try {
             user.setEmail(body.getEmail());
-            return userService.saveUser(user);
+            User rUser = userService.saveUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(rUser);
         } catch (Error e) {
-            // TODO: make a proper error message;
-            throw new Error("");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 }

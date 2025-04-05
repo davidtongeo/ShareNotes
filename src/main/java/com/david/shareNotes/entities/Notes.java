@@ -1,6 +1,6 @@
 package com.david.shareNotes.entities;
 
-import java.sql.Date;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +17,8 @@ public class Notes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private List<String> tags;
+
     private String contenido;
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
@@ -28,6 +30,14 @@ public class Notes {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public String getTitle() {

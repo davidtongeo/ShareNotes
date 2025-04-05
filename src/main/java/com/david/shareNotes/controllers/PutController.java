@@ -1,5 +1,7 @@
 package com.david.shareNotes.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +20,12 @@ public class PutController {
     }
 
     @PutMapping("/notes/{id}")
-    public Notes updateNote(@PathVariable Long id, @RequestBody notesParam note) {
-        return noteService.updateNote(id, note);
+    public ResponseEntity<Object> updateNote(@PathVariable Long id, @RequestBody notesParam note) {
+        try {
+            Notes rNote = noteService.updateNote(id, note);
+            return ResponseEntity.status(HttpStatus.OK).body(rNote);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
     }
 }
