@@ -48,7 +48,6 @@ public class GetController {
             returnableNote note = noteService.getNoteById(id);
             return ResponseEntity.status(HttpStatus.FOUND).body(note);
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
