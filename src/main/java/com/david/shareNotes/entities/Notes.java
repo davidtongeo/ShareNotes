@@ -24,6 +24,10 @@ public class Notes {
     @JoinColumn(name = "id_usuario", nullable = false)
     private User Usuario;
 
+    // required by JPA
+    public Notes() {
+    }
+
     public Notes(String title, List<String> tags, String contenido, User usuario) {
         this.title = title;
         this.tags = tags;

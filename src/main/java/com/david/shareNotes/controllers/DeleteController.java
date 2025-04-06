@@ -17,13 +17,12 @@ public class DeleteController {
     }
 
     @DeleteMapping("notes/{id}")
-    public ResponseEntity<Object> deleteNote(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
         try {
             noteService.deleteNote(id);
-            return ResponseEntity.status(HttpStatus.CREATED).body("");
+            return ResponseEntity.noContent().build();
         } catch (Error e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            return ResponseEntity.notFound().build();
         }
-        // return noteService.deleteNote(id);
     }
 }

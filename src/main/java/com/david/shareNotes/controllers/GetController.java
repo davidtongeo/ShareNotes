@@ -27,6 +27,7 @@ public class GetController {
             // No parameters were found.
             try {
                 List<returnableNote> notes = noteService.getAllNotes();
+                System.out.println(notes);
                 return ResponseEntity.status(HttpStatus.FOUND).body(notes);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
