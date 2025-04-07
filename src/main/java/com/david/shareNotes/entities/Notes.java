@@ -18,6 +18,7 @@ public class Notes {
     private Long id;
     private String title;
     private List<String> tags;
+    private Long likes;
 
     private String contenido;
     @ManyToOne
@@ -28,11 +29,28 @@ public class Notes {
     public Notes() {
     }
 
+    public Notes(String title, List<String> tags, String contenido, User usuario, Long likes) {
+        this.title = title;
+        this.tags = tags;
+        this.contenido = contenido;
+        this.likes = likes;
+        Usuario = usuario;
+    }
+
     public Notes(String title, List<String> tags, String contenido, User usuario) {
         this.title = title;
         this.tags = tags;
         this.contenido = contenido;
+        this.likes = (long) 0;
         Usuario = usuario;
+    }
+
+    public Long getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Long likes) {
+        this.likes = likes;
     }
 
     public Long getId() {

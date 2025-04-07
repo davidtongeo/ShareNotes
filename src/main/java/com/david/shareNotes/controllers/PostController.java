@@ -2,6 +2,7 @@ package com.david.shareNotes.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.david.shareNotes.entities.User;
 import com.david.shareNotes.services.UserService;
 import com.david.shareNotes.services.NoteService;
+import com.david.shareNotes.types.likeType;
 import com.david.shareNotes.types.notesParam;
 import com.david.shareNotes.types.returnableNote;
 import com.david.shareNotes.types.returnableUser;
@@ -34,6 +36,16 @@ public class PostController {
         } catch (Error e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity<Object> performLike(@RequestBody likeType like) {
+        try {
+            noteService.likeNote(like.getIdUser(), like.getIdNote());
+        } catch (Exception e) {
+            ResponseEntity.internalServerError().body("Cant perform like");
+        }
+        return ResponseEntity.ok().body("Liked the note with id: " + like.getIdNote());
     }
 
     @PostMapping("/note")

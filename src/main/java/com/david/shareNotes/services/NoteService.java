@@ -5,7 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.david.shareNotes.entities.Like;
 import com.david.shareNotes.entities.Notes;
+import com.david.shareNotes.entities.User;
+import com.david.shareNotes.repositories.LikeRepository;
 import com.david.shareNotes.repositories.NoteRepository;
 import com.david.shareNotes.repositories.UserRepository;
 import com.david.shareNotes.types.notesParam;
@@ -16,36 +19,84 @@ import com.david.shareNotes.types.returnableUser;
 public class NoteService {
     UserRepository userRepo;
     NoteRepository noteRepo;
+    LikeRepository likeRepo;
+    LikeService likeService;
 
-    public NoteService(UserRepository repo, NoteRepository noteRepo) {
+    public NoteService(UserRepository repo, NoteRepository noteRepo, LikeRepository likeRepo, LikeService likeService) {
         this.userRepo = repo;
         this.noteRepo = noteRepo;
+        this.likeRepo = likeRepo;
+        this.likeService = likeService;
     }
 
     public returnableNote saveNote(notesParam note) {
         try {
             Notes cNote = new Notes(note.getTitle(), note.getTags(), note.getContenido(),
+
                     userRepo.findById(note.getUser_id()).get());
             // Make the retornable Note
             Notes repoNote = noteRepo.save(cNote);
             returnableNote retNote = new returnableNote(repoNote.getTitle(), repoNote.getContenido(),
                     repoNote.getTags(),
-                    new returnableUser(repoNote.getUsuario().getName(), repoNote.getUsuario().getId()));
+                    new returnableUser(repoNote.getUsuario().getName(), repoNote.getUsuario().getId()),
+                    repoNote.getId(), repoNote.getLikes());
             return retNote;
         } catch (Error e) {
             throw new Error("Couldn't make the Note entity");
         }
     }
 
+    public returnableNote likeNote(Long user, Long note) {
+        Like returnedLike;
+        Notes returnedNote;
+        try {
+            returnedLike = likeService.returnLike(user, note);
+        } catch (Exception e) {
+            throw new Error(e);
+        }
+        if (returnedLike == null) {
+            // find the note
+            try {
+                returnedNote = noteRepo.findById(note).get();
+            } catch (Exception e) {
+                throw new Error("Couldn't find any note with that id: " + note);
+            }
+            returnedNote.setLikes(returnedNote.getLikes() + 1);
+            // save the note
+            try {
+                returnedNote = noteRepo.save(returnedNote);
+                User toSaveToLikeUser;
+                try {
+                    toSaveToLikeUser = userRepo.findById(user).get();
+                } catch (Exception e) {
+                    throw new Error("Can't find a user with that id for the like, id: " + user);
+                }
+                Like toSaveLike = new Like(toSaveToLikeUser, returnedNote);
+                try {
+                    likeRepo.save(toSaveLike);
+                } catch (Exception e) {
+                    throw new Error("Cant save the like. refer to the NoteService");
+                }
+            } catch (Exception e) {
+                throw new Error("Cant save the note with id: " + note);
+            }
+        } else {
+            throw new Error("Can't like the note with the id: " + note);
+        }
+        return new returnableNote(returnedNote.getTitle(), returnedNote.getContenido(), returnedNote.getTags(),
+                new returnableUser(returnedNote.getUsuario().getName(), returnedNote.getUsuario().getId()),
+                returnedNote.getId(), returnedNote.getLikes());
+    }
+
     public List<returnableNote> getAllNotes() {
         try {
-            System.out.println("###################################################WFNJKLFKLNKNAFLFKLNWFKLNWF");
             List<Notes> notes = noteRepo.findAll();
             List<returnableNote> listRetNotes = new ArrayList<returnableNote>();
             // for every note we'll make a retNote object that we can show to the client.
             for (Notes note : notes) {
                 returnableNote rNote = new returnableNote(note.getTitle(), note.getContenido(), note.getTags(),
-                        new returnableUser(note.getUsuario().getName(), note.getUsuario().getId()));
+                        new returnableUser(note.getUsuario().getName(), note.getUsuario().getId()), note.getId(),
+                        note.getLikes());
                 listRetNotes.add(rNote);
             }
             return listRetNotes;
@@ -58,7 +109,8 @@ public class NoteService {
         try {
             Notes note = noteRepo.findById(id).get();
             return new returnableNote(note.getTitle(), note.getContenido(), note.getTags(),
-                    new returnableUser(note.getUsuario().getName(), note.getUsuario().getId()));
+                    new returnableUser(note.getUsuario().getName(), note.getUsuario().getId()), note.getId(),
+                    note.getLikes());
         } catch (Error e) {
             throw new Error("couldn't find the note by the id");
         }
@@ -80,7 +132,8 @@ public class NoteService {
             repoNote.setTags(note.getTags());
             Notes savedNode = noteRepo.save(repoNote);
             return new returnableNote(savedNode.getTitle(), savedNode.getContenido(), savedNode.getTags(),
-                    new returnableUser(savedNode.getUsuario().getName(), savedNode.getUsuario().getId()));
+                    new returnableUser(savedNode.getUsuario().getName(), savedNode.getUsuario().getId()),
+                    savedNode.getId(), savedNode.getLikes());
         } catch (Error e) {
             throw new Error("Couldn't update the note for the id: " + id);
         }
@@ -93,7 +146,8 @@ public class NoteService {
             List<returnableNote> listRetNotes = new ArrayList<returnableNote>();
             for (Notes note : notes) {
                 listRetNotes.add(new returnableNote(note.getTitle(), note.getContenido(), note.getTags(),
-                        new returnableUser(note.getUsuario().getName(), note.getUsuario().getId())));
+                        new returnableUser(note.getUsuario().getName(), note.getUsuario().getId()), note.getId(),
+                        note.getLikes()));
             }
             return listRetNotes;
         } catch (Error e) {

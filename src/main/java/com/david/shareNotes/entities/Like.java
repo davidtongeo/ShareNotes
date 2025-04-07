@@ -21,6 +21,14 @@ public class Like {
     @JoinColumn(name = "id_note", nullable = false)
     private Notes note;
 
+    public Like() {
+    }
+
+    public Like(User user, Notes note) {
+        this.user = user;
+        this.note = note;
+    }
+
     public Long getId() {
         return id;
     }

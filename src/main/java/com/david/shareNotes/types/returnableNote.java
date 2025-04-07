@@ -2,13 +2,24 @@ package com.david.shareNotes.types;
 
 import java.util.List;
 
-import com.david.shareNotes.entities.User;
+import com.david.shareNotes.entities.Like;
 
 public class returnableNote {
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
     private String title;
     private String content;
     private List<String> tags;
     private returnableUser user;
+    private Long like;
+
+    public Long getLike() {
+        return like;
+    }
 
     public returnableUser getUser() {
         return user;
@@ -26,11 +37,13 @@ public class returnableNote {
         return tags;
     }
 
-    public returnableNote(String title, String content, List<String> tags, returnableUser user) {
+    public returnableNote(String title, String content, List<String> tags, returnableUser user, Long id, Long like) {
         this.title = title;
         this.content = content;
         this.tags = tags;
         this.user = user;
+        this.id = id;
+        this.like = like;
     }
 
 }
