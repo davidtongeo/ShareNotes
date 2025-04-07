@@ -13,7 +13,7 @@ Source code for ShareNotes, an app that let you take notes and share them.
 ## Priori [due 8 de abil]
 
 - [x] Hacer el modelo entidad relacion
-- [ ] Proponer los endpoints `tengo que hablarlo con prada que imagino es el encargado principal del frontend`
-- [ ] Pasar el modelo de entidad relacion a `/src/entities/`
-- [ ] Hacer los endpoints propuestos
+- [x] Proponer los endpoints `tengo que hablarlo con prada que imagino es el encargado principal del frontend`
+- [x] Pasar el modelo de entidad relacion a `/src/entities/`
+- [x] Hacer los endpoints propuestos
 
