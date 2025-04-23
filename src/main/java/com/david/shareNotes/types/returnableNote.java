@@ -2,8 +2,6 @@ package com.david.shareNotes.types;
 
 import java.util.List;
 
-import com.david.shareNotes.entities.Like;
-
 public class returnableNote {
     private Long id;
 

@@ -20,7 +20,7 @@ public class DeleteController {
         try {
             noteService.deleteNote(id);
             return ResponseEntity.noContent().build();
-        } catch (Error e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }

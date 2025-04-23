@@ -2,7 +2,6 @@ package com.david.shareNotes.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +32,7 @@ public class PostController {
         try {
             returnableUser user = userService.authLoggin(body);
             return ResponseEntity.status(HttpStatus.OK).body(user);
-        } catch (Error e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
@@ -53,7 +52,7 @@ public class PostController {
         try {
             returnableNote rNote = noteService.saveNote(note);
             return ResponseEntity.status(HttpStatus.CREATED).body(rNote);
-        } catch (Error e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
@@ -68,7 +67,7 @@ public class PostController {
             user.setEmail(body.getEmail());
             returnableUser rUser = userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(rUser);
-        } catch (Error e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }

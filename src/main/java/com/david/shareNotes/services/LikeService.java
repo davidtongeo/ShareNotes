@@ -13,7 +13,7 @@ public class LikeService {
         this.likeRepo = likeRepo;
     }
 
-    public Like returnLike(Long user, Long note) {
+    public Like returnLike(Long user, Long note) throws Exception {
         Like obtainedLike;
         try {
             if (likeRepo.findByUserIdAndNoteId(user, note).isPresent()) {
@@ -22,7 +22,7 @@ public class LikeService {
                 return null;
             }
         } catch (Exception e) {
-            throw new Error("Couldn't find any like. " + e);
+            throw new Exception("Couldn't find any like. " + e);
         }
         return obtainedLike;
     }

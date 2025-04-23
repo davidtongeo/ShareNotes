@@ -29,7 +29,7 @@ public class NoteService {
         this.likeService = likeService;
     }
 
-    public returnableNote saveNote(notesParam note) {
+    public returnableNote saveNote(notesParam note) throws Exception {
         try {
             Notes cNote = new Notes(note.getTitle(), note.getTags(), note.getContenido(),
 
@@ -41,25 +41,25 @@ public class NoteService {
                     new returnableUser(repoNote.getUsuario().getName(), repoNote.getUsuario().getId()),
                     repoNote.getId(), repoNote.getLikes());
             return retNote;
-        } catch (Error e) {
-            throw new Error("Couldn't make the Note entity");
+        } catch (Exception e) {
+            throw new Exception("Couldn't make the Note entity");
         }
     }
 
-    public returnableNote likeNote(Long user, Long note) {
+    public returnableNote likeNote(Long user, Long note) throws Exception {
         Like returnedLike;
         Notes returnedNote;
         try {
             returnedLike = likeService.returnLike(user, note);
         } catch (Exception e) {
-            throw new Error(e);
+            throw new Exception(e);
         }
         if (returnedLike == null) {
             // find the note
             try {
                 returnedNote = noteRepo.findById(note).get();
             } catch (Exception e) {
-                throw new Error("Couldn't find any note with that id: " + note);
+                throw new Exception("Couldn't find any note with that id: " + note);
             }
             returnedNote.setLikes(returnedNote.getLikes() + 1);
             // save the note
@@ -69,26 +69,26 @@ public class NoteService {
                 try {
                     toSaveToLikeUser = userRepo.findById(user).get();
                 } catch (Exception e) {
-                    throw new Error("Can't find a user with that id for the like, id: " + user);
+                    throw new Exception("Can't find a user with that id for the like, id: " + user);
                 }
                 Like toSaveLike = new Like(toSaveToLikeUser, returnedNote);
                 try {
                     likeRepo.save(toSaveLike);
                 } catch (Exception e) {
-                    throw new Error("Cant save the like. refer to the NoteService");
+                    throw new Exception("Cant save the like. refer to the NoteService");
                 }
             } catch (Exception e) {
-                throw new Error("Cant save the note with id: " + note);
+                throw new Exception("Cant save the note with id: " + note);
             }
         } else {
-            throw new Error("Can't like the note with the id: " + note);
+            throw new Exception("Can't like the note with the id: " + note);
         }
         return new returnableNote(returnedNote.getTitle(), returnedNote.getContenido(), returnedNote.getTags(),
                 new returnableUser(returnedNote.getUsuario().getName(), returnedNote.getUsuario().getId()),
                 returnedNote.getId(), returnedNote.getLikes());
     }
 
-    public List<returnableNote> getAllNotes() {
+    public List<returnableNote> getAllNotes() throws Exception {
         try {
             List<Notes> notes = noteRepo.findAll();
             List<returnableNote> listRetNotes = new ArrayList<returnableNote>();
@@ -100,31 +100,31 @@ public class NoteService {
                 listRetNotes.add(rNote);
             }
             return listRetNotes;
-        } catch (Error e) {
-            throw new Error("INTERNAL SERVER ERROR, CANT FIND ANY NOTES");
+        } catch (Exception e) {
+            throw new Exception("INTERNAL SERVER ERROR, CANT FIND ANY NOTES");
         }
     }
 
-    public returnableNote getNoteById(Long id) {
+    public returnableNote getNoteById(Long id) throws Exception {
         try {
             Notes note = noteRepo.findById(id).get();
             return new returnableNote(note.getTitle(), note.getContenido(), note.getTags(),
                     new returnableUser(note.getUsuario().getName(), note.getUsuario().getId()), note.getId(),
                     note.getLikes());
-        } catch (Error e) {
-            throw new Error("couldn't find the note by the id");
+        } catch (Exception e) {
+            throw new Exception("couldn't find the note by the id");
         }
     }
 
-    public void deleteNote(Long id) {
+    public void deleteNote(Long id) throws Exception {
         try {
             noteRepo.deleteById(id);
-        } catch (Error e) {
-            throw new Error("Couldn't find the note id, therefore it cant delete it");
+        } catch (Exception e) {
+            throw new Exception("Couldn't find the note id, therefore it cant delete it");
         }
     }
 
-    public returnableNote updateNote(Long id, notesParam note) {
+    public returnableNote updateNote(Long id, notesParam note) throws Exception {
         try {
             Notes repoNote = noteRepo.findById(id).get();
             repoNote.setTitle(note.getTitle());
@@ -134,13 +134,13 @@ public class NoteService {
             return new returnableNote(savedNode.getTitle(), savedNode.getContenido(), savedNode.getTags(),
                     new returnableUser(savedNode.getUsuario().getName(), savedNode.getUsuario().getId()),
                     savedNode.getId(), savedNode.getLikes());
-        } catch (Error e) {
-            throw new Error("Couldn't update the note for the id: " + id);
+        } catch (Exception e) {
+            throw new Exception("Couldn't update the note for the id: " + id);
         }
     }
 
     // find by Tag
-    public List<returnableNote> findByTag(List<String> tags) {
+    public List<returnableNote> findByTag(List<String> tags) throws Exception {
         try {
             List<Notes> notes = noteRepo.findByTags(tags);
             List<returnableNote> listRetNotes = new ArrayList<returnableNote>();
@@ -150,8 +150,8 @@ public class NoteService {
                         note.getLikes()));
             }
             return listRetNotes;
-        } catch (Error e) {
-            throw new Error("Couldn't find by tag");
+        } catch (Exception e) {
+            throw new Exception("Couldn't find by tag");
         }
     }
 }

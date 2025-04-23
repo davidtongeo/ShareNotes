@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    width: 100%;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/images/fondolog.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.left-section {
+    flex: 1;
+    color: white;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.slogan h2 {
+    font-size: 80px;
+    color: #00bcd4;
+    margin-bottom: 1rem;
+    margin-left: 70px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.slogan p {
+    font-size: 38px;
+    margin-left: 70px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.hipervinculo a {
+    display: inline-block;
+    color: white;
+    margin-left: 90px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 30px;
+    font-family: 'Lucida Console', monospace;
+    transition: background-color 0.3s ease;
+}
+
+.hipervinculo a img.icono {
+    width: 40px;
+    vertical-align: middle;
+}
+
+.formulario {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.caja {
+    background: rgba(192, 242, 242, 0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 350px;
+    text-align: center;
+    margin-right: 100px;
+}
+
+.caja img.cerebro {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1.5rem;
+    background-color: #3fb5c5;
+    border-radius: 50%;
+    padding: 20px;
+    box-sizing: content-box;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 1.2rem;
+    background: white;
+    border: none;
+    border-radius: 13px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #747373;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #00bcd4;
+    color: white;
+}
+
+.registro-campos {
+    overflow: hidden;
+    height: 0;
+    transition: height 0.4s ease;
+}
+
+.registro-campos.visible {
+    height: 400px;
+}
+
+.input-registro {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.registro-campos h2 {
+    color: #ffff;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-family: 'Josefin Sans', sans-serif;
+}
