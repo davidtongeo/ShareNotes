@@ -6,10 +6,10 @@ Not really a frontend guy, first time ever using a frontend framework.
 
 # Todo
 
-[ ] Admin type user.
-[ ] Using fzf for the searchbar.
-[ ] add comments as a function of a note.
-[ ] Endpoing for creating a note.
+- [ ] Admin type user.
+- [ ] Using fzf for the searchbar.
+- [ ] add comments as a function of a note.
+- [ ] Endpoing for creating a note.
 
 # Members
 
