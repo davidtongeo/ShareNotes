@@ -15,6 +15,15 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
+    public returnableUser getUserById(Long id) throws Exception {
+        try {
+            User user = userRepo.findById(id).get();
+            return new returnableUser(user.getName(), user.getId());
+        } catch (Exception e) {
+            throw new Exception("INTERNAL SERVER ERROR: cant find by id.");
+        }
+    }
+
     public returnableUser saveUser(User user) throws Exception {
         if (user == null)
             throw new Exception("The user was null");

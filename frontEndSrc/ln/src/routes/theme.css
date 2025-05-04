@@ -1,0 +1,30 @@
+:global(.carta-theme) {
+    font-family: system-ui, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 600px;
+}
+
+:global(.carta-theme h1) {
+    color: royalblue;
+    font-size: 2rem;
+    margin-top: 1.5rem;
+}
+
+
+:global(.carta-theme code) {
+    background: #f4f4f4;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+:global(.carta-theme pre) {
+    background: #1e1e1e;
+    color: #eee;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+:global(.carta-theme li) {
+    text-decoration: underline;
+}
