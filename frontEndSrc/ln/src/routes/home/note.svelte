@@ -1,6 +1,7 @@
 <script lang="ts">
     let props = $props();
     import NoteFs from "./noteFS.svelte";
+    import Tag from "./tag.svelte";
     import "../../app.css";
     import { Carta } from "carta-md";
     let carta = new Carta({ sanitizer: false, theme: "github-light" });
@@ -38,6 +39,12 @@
                 {@html content}
             </div>
         {/await}
+    </div>
+    <h1 class="mt-3 mb-3 font-bold">Tags</h1>
+    <div class="flex flex-row w-full">
+        {#each props.pObject.tags as tag}
+            <Tag>{tag}</Tag>
+        {/each}
     </div>
     <br />
     <DefaultButton isWhite={null} onClickHandler={null}>

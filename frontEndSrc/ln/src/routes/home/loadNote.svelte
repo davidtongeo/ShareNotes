@@ -1,16 +1,23 @@
 <script lang="ts">
+    import { ssrExportAllKey } from "vite/module-runner";
     import Note from "./note.svelte";
 
     let { asyncFunction, searchInput } = $props();
-    function matchCase(obj: string[], input: string[]): boolean {
-        obj.forEach((el: string) => {
-            input.forEach((eld: string) => {
-                console.log(eld);
-                if (el.toLocaleLowerCase().startsWith(eld)) return true;
-            });
-        });
-
-        return false; //default
+    function matchCase(
+        obj: string[] | null | undefined,
+        input: string[] | null | undefined,
+    ): boolean {
+        return obj.some(
+            (el) =>
+                typeof el === "string" &&
+                input.some(
+                    (eld) =>
+                        typeof eld === "string" &&
+                        el
+                            .toLocaleLowerCase()
+                            .startsWith(eld.toLocaleLowerCase()),
+                ),
+        );
     }
 </script>
 
@@ -27,7 +34,6 @@
                 {/if}
             {/each}
         {:else}
-            {console.log(!searchInput.startsWith("#"))}
             {#each data as jsonComponent}
                 {#if matchCase(jsonComponent.tags, searchInput.split())}
                     <Note pObject={jsonComponent}></Note>

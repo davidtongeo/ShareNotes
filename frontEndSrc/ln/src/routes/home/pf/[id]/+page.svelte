@@ -1,13 +1,8 @@
 <script lang="ts">
     import "../../../../app.css";
     import ShareNotesBtn from "../../shareNotesBtn.svelte";
-    import { fade, scale } from "svelte/transition";
     import brain from "$lib/assets/brain.png";
-    import shareNotes from "$lib/assets/sn.png";
     import Note from "../../note.svelte";
-    import DefaultButton from "../../../defaultButton.svelte";
-    import search from "$lib/assets/search.svg";
-    import ProfileContainer from "../../profileContainer.svelte";
     let pf = $state("");
     async function getinfo() {
         const response = await fetch("http://localhost:8080/notes", {

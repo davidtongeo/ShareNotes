@@ -1,5 +1,6 @@
 <script lang="ts">
     import "../../app.css";
+    import Tag from "./tag.svelte";
     import { Carta } from "carta-md";
     let carta = new Carta({ sanitizer: false, theme: "github-light" });
     import DefaultButton from "../defaultButton.svelte";
@@ -32,6 +33,12 @@
             class="text-blue-700 cursor-pointer"
             >Usuario: {props.pObject.user.username}</a
         >
+        <h1 class="mt-3 mb-3 font-bold">Tags</h1>
+        <div class="flex flex-row w-full mt-2">
+            {#each props.pObject.tags as tag}
+                <Tag>{tag}</Tag>
+            {/each}
+        </div>
         <div class="bg-gray-200 w-full rounded">
             {#await carta.render(props.pObject.content) then content}
                 <div class=" max-h-2/3 wrap-break-word carta-theme m-2">
