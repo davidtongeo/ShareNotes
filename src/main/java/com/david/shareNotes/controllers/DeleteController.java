@@ -3,6 +3,7 @@ package com.david.shareNotes.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.david.shareNotes.services.NoteService;
@@ -16,6 +17,7 @@ public class DeleteController {
     }
 
     @DeleteMapping("notes/{id}")
+    @ResponseBody
     public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
         try {
             noteService.deleteNote(id);

@@ -41,7 +41,7 @@ public class UserService {
         if (user == null)
             throw new Error("The user was null.");
         try {
-            User foundedUser = userRepo.findUser(user.getEmail(), user.getPassword());
+            User foundedUser = userRepo.findUser(user.getName(), user.getPassword());
             if (foundedUser == null)
                 throw new Exception("No user was found.");
             return new returnableUser(foundedUser.getName(), foundedUser.getId());

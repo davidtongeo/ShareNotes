@@ -3,12 +3,45 @@
 
     import "../app.css";
     import DefaultButton from "./defaultButton.svelte";
+    let username = $state("");
+    let password = $state("");
+    let email = $state("");
 
     function changeLoginState() {
         loginState = !loginState;
     }
-    function clicklg() {
-        location.href = "/home";
+    async function clicklg() {
+        const objPass = {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({ name: username, password: password }),
+        };
+        const resp = await fetch("http://localhost:8080/loggin", objPass);
+        const json = await resp.json();
+        console.log(json);
+        if (resp.ok && typeof window !== "undefined") {
+            localStorage.setItem("user", JSON.stringify(json));
+            location.href = "/home";
+        } else {
+            alert("Couldn't log in.");
+        }
+    }
+    async function clickreg() {
+        const resp = await fetch("http://localhost:8080/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: username,
+                password: password,
+                email: email,
+            }),
+        });
+        loginState = !loginState;
+        if (resp.ok) {
+            alert("Created!");
+        } else {
+            alert("Couldn't register.");
+        }
     }
 
     const formMinHeight = "390px";
@@ -19,6 +52,7 @@
         class="mt-5 p-6 w-full max-w-sm bg-white rounded-lg shadow-md flex flex-col justify-center"
         style="min-height: {formMinHeight};"
     >
+        <br />
         {#if !loginState}
             <h2 class="text-xl font-semibold mb-5 text-center text-gray-700">
                 Iniciar Sesión
@@ -34,6 +68,7 @@
                 type="text"
                 id="login-username"
                 placeholder="tu_usuario"
+                bind:value={username}
             />
 
             <label
@@ -46,6 +81,7 @@
                 type="password"
                 id="login-password"
                 placeholder="••••••••"
+                bind:value={password}
             />
 
             <a
@@ -70,6 +106,7 @@
                 type="text"
                 id="register-username"
                 placeholder="elige_un_usuario"
+                bind:value={username}
             />
 
             <label
@@ -82,6 +119,7 @@
                 type="password"
                 id="register-password"
                 placeholder="••••••••"
+                bind:value={password}
             />
 
             <label
@@ -94,6 +132,7 @@
                 type="email"
                 id="email"
                 placeholder="tu@correo.com"
+                bind:value={email}
             />
 
             <a
@@ -105,7 +144,9 @@
             </a>
         {/if}
         <br />
-        <DefaultButton isWhite={null} onClickHandler={clicklg}
+        <DefaultButton
+            isWhite={null}
+            onClickHandler={!loginState ? clicklg : clickreg}
             >{!loginState ? "Entrar" : "Registrar"}</DefaultButton
         >
     </div>

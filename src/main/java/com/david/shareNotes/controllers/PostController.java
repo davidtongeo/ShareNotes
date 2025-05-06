@@ -2,8 +2,10 @@ package com.david.shareNotes.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.david.shareNotes.entities.User;
@@ -27,6 +29,7 @@ public class PostController {
     }
 
     @PostMapping("/loggin")
+    @ResponseBody
     // TODO: near future try to retrieve jwt
     public ResponseEntity<Object> performLoggin(@RequestBody userParam body) {
         try {
@@ -38,6 +41,7 @@ public class PostController {
     }
 
     @PostMapping("/like")
+    @ResponseBody
     public ResponseEntity<Object> performLike(@RequestBody likeType like) {
         try {
             noteService.likeNote(like.getIdUser(), like.getIdNote());
@@ -48,6 +52,7 @@ public class PostController {
     }
 
     @PostMapping("/note")
+    @ResponseBody
     public ResponseEntity<Object> saveNote(@RequestBody notesParam note) {
         try {
             returnableNote rNote = noteService.saveNote(note);
@@ -58,6 +63,7 @@ public class PostController {
     }
 
     @PostMapping("/register")
+    @ResponseBody
     public ResponseEntity<Object> saveUser(@RequestBody userParam body) {
         User user = new User();
         // init

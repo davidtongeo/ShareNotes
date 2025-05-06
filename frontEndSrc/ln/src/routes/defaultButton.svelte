@@ -6,10 +6,8 @@
 <button
     onclick={onClickHandler != null ? onClickHandler : () => {}}
     class="{isWhite != 'true'
-        ? 'bg-blue-500'
-        : 'bg-white'} hover:bg-blue-700 {isWhite != 'true'
-        ? 'text-white'
-        : 'text-blue-500'} font-bold py-2 px-4 rounded flex flex-row cursor-pointer"
+        ? 'bg-blue-500 text-white'
+        : 'bg-white text-black'} transition-all duration-200 hover:invert filter font-bold py-2 px-4 rounded flex flex-row cursor-pointer"
 >
     {@render children()}
 </button>

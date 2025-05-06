@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.david.shareNotes.services.NoteService;
@@ -20,6 +21,7 @@ public class PutController {
     }
 
     @PutMapping("/notes/{id}")
+    @ResponseBody
     public ResponseEntity<Object> updateNote(@PathVariable Long id, @RequestBody notesParam note) {
         try {
             returnableNote rNote = noteService.updateNote(id, note);

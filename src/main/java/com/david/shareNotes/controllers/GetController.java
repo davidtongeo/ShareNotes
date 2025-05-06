@@ -51,6 +51,7 @@ public class GetController {
     }
 
     @GetMapping("/notes/{id}")
+    @ResponseBody
     public ResponseEntity<Object> getSingleNote(@PathVariable Long id) {
         try {
             returnableNote note = noteService.getNoteById(id);
@@ -61,6 +62,7 @@ public class GetController {
     }
 
     @GetMapping("/profile/{id}")
+    @ResponseBody
     public ResponseEntity<Object> getpf(@PathVariable Long id) {
         try {
             returnableUser user = userService.getUserById(id);
