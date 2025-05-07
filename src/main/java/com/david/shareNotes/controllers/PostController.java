@@ -61,12 +61,15 @@ public class PostController {
 
     @PostMapping("/register")
     public ResponseEntity<Object> saveUser(@RequestBody userParam body) {
+        System.out.println("####################################");
+        System.out.println(body.getIsAdmin());
         User user = new User();
         // init
         user.setName(body.getName());
         user.setPassword(body.getPassword());
         try {
             user.setEmail(body.getEmail());
+            user.setAdmin(body.getIsAdmin());
             returnableUser rUser = userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(rUser);
         } catch (Exception e) {

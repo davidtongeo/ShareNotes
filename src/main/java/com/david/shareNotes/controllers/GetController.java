@@ -68,4 +68,15 @@ public class GetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
+
+    @GetMapping("/checkAdmin/{id}")
+    public ResponseEntity<Object> checkAdmin(@PathVariable Long id) {
+        try {
+            boolean result = userService.checkIfAdmin(id);
+            return ResponseEntity.status(HttpStatus.FOUND).body(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
+        }
+    }
+
 }

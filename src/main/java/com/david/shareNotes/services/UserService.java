@@ -49,4 +49,14 @@ public class UserService {
             throw new Exception("couldn't log-in.");
         }
     }
+
+    public boolean checkIfAdmin(Long id) throws Exception {
+        try {
+            User fUser = userRepo.findById(id).get();
+            return fUser.isAdmin();
+        } catch (Exception e) {
+
+            throw new Exception("Cant find the user.");
+        }
+    }
 }

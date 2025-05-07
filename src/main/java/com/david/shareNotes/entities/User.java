@@ -16,13 +16,22 @@ public class User {
     private Long id;
     private String name;
     private String email;
-    // TODO: near future me, encrypt the password, i dont have time to do that
     private String password;
 
     public boolean validateEmail(String email) {
         String regexString = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         Pattern emailPattern = Pattern.compile(regexString);
         return emailPattern.matcher(email).matches();
+    }
+
+    public boolean isAdmin;
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     // getters and setters

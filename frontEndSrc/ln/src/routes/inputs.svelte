@@ -6,6 +6,7 @@
     let username = $state("");
     let password = $state("");
     let email = $state("");
+    let isAdmin = $state(false);
 
     function changeLoginState() {
         loginState = !loginState;
@@ -34,6 +35,7 @@
                 name: username,
                 password: password,
                 email: email,
+                isAdmin: isAdmin,
             }),
         });
         loginState = !loginState;
@@ -134,7 +136,13 @@
                 placeholder="tu@correo.com"
                 bind:value={email}
             />
-
+            <label
+                for="admin"
+                class="block mb-1 text-sm font-medium text-center text-gray-600"
+                >Es administrador?</label
+            >
+            <input type="checkbox" id="admin" bind:checked={isAdmin} />
+            <br />
             <a
                 href="#!"
                 onclick={changeLoginState}
