@@ -29,7 +29,6 @@ public class PostController {
     }
 
     @PostMapping("/loggin")
-    // TODO: near future try to retrieve jwt
     public ResponseEntity<Object> performLoggin(@RequestBody userParam body) {
         try {
             returnableUser user = userService.authLoggin(body);

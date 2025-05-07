@@ -9,6 +9,23 @@
     import { goto } from "$app/navigation";
     let props = $props();
     let maxChar = props.maxChar != null ? props.maxChar : 200;
+    function verifyUser(): null | undefined {
+        if (localStorage.getItem("user") === null) return null;
+    }
+    function getUser(): object {
+        if (verifyUser() === null) return {};
+        return JSON.parse(localStorage.getItem("user") as string);
+    }
+    async function del() {
+        const resp = await fetch(
+            `http://localhost:8080/notes/${props.pObject.id}`,
+            { method: "DELETE" },
+        );
+        if (resp.status == 204) {
+            alert("Note deleted");
+            location.reload();
+        }
+    }
 </script>
 
 <div class="w-full h-full z-20 flex justify-center items-center fixed top-0">
@@ -39,6 +56,13 @@
                 <Tag>{tag}</Tag>
             {/each}
         </div>
+        {#if getUser().admin || getUser().id == props.pObject.user.id}
+            <br />
+            <DefaultButton isWhite={null} onClickHandler={del}
+                >Eliminar</DefaultButton
+            >
+            <br />
+        {/if}
         <div class="bg-gray-200 w-full rounded">
             {#await carta.render(props.pObject.content) then content}
                 <div class=" max-h-2/3 wrap-break-word carta-theme m-2">

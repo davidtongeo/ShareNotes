@@ -21,12 +21,15 @@ public class NoteService {
     NoteRepository noteRepo;
     LikeRepository likeRepo;
     LikeService likeService;
+    UserService userService;
 
-    public NoteService(UserRepository repo, NoteRepository noteRepo, LikeRepository likeRepo, LikeService likeService) {
+    public NoteService(UserRepository repo, NoteRepository noteRepo, LikeRepository likeRepo, LikeService likeService,
+            UserService userService) {
         this.userRepo = repo;
         this.noteRepo = noteRepo;
         this.likeRepo = likeRepo;
         this.likeService = likeService;
+        this.userService = userService;
     }
 
     public returnableNote saveNote(notesParam note) throws Exception {
@@ -38,7 +41,8 @@ public class NoteService {
             Notes repoNote = noteRepo.save(cNote);
             returnableNote retNote = new returnableNote(repoNote.getTitle(), repoNote.getContenido(),
                     repoNote.getTags(),
-                    new returnableUser(repoNote.getUsuario().getName(), repoNote.getUsuario().getId()),
+                    new returnableUser(repoNote.getUsuario().getName(), repoNote.getUsuario().getId(),
+                            userService.checkIfAdmin(repoNote.getUsuario().getId())),
                     repoNote.getId(), repoNote.getLikes());
             return retNote;
         } catch (Exception e) {
@@ -84,7 +88,8 @@ public class NoteService {
             throw new Exception("Can't like the note with the id: " + note);
         }
         return new returnableNote(returnedNote.getTitle(), returnedNote.getContenido(), returnedNote.getTags(),
-                new returnableUser(returnedNote.getUsuario().getName(), returnedNote.getUsuario().getId()),
+                new returnableUser(returnedNote.getUsuario().getName(), returnedNote.getUsuario().getId(),
+                        userService.checkIfAdmin(returnedNote.getUsuario().getId())),
                 returnedNote.getId(), returnedNote.getLikes());
     }
 
@@ -95,7 +100,9 @@ public class NoteService {
             // for every note we'll make a retNote object that we can show to the client.
             for (Notes note : notes) {
                 returnableNote rNote = new returnableNote(note.getTitle(), note.getContenido(), note.getTags(),
-                        new returnableUser(note.getUsuario().getName(), note.getUsuario().getId()), note.getId(),
+                        new returnableUser(note.getUsuario().getName(), note.getUsuario().getId(),
+                                userService.checkIfAdmin(note.getUsuario().getId())),
+                        note.getId(),
                         note.getLikes());
                 listRetNotes.add(rNote);
             }
@@ -109,7 +116,9 @@ public class NoteService {
         try {
             Notes note = noteRepo.findById(id).get();
             return new returnableNote(note.getTitle(), note.getContenido(), note.getTags(),
-                    new returnableUser(note.getUsuario().getName(), note.getUsuario().getId()), note.getId(),
+                    new returnableUser(note.getUsuario().getName(), note.getUsuario().getId(),
+                            userService.checkIfAdmin(note.getUsuario().getId())),
+                    note.getId(),
                     note.getLikes());
         } catch (Exception e) {
             throw new Exception("couldn't find the note by the id");
@@ -132,7 +141,8 @@ public class NoteService {
             repoNote.setTags(note.getTags());
             Notes savedNode = noteRepo.save(repoNote);
             return new returnableNote(savedNode.getTitle(), savedNode.getContenido(), savedNode.getTags(),
-                    new returnableUser(savedNode.getUsuario().getName(), savedNode.getUsuario().getId()),
+                    new returnableUser(savedNode.getUsuario().getName(), savedNode.getUsuario().getId(),
+                            userService.checkIfAdmin(savedNode.getUsuario().getId())),
                     savedNode.getId(), savedNode.getLikes());
         } catch (Exception e) {
             throw new Exception("Couldn't update the note for the id: " + id);
@@ -146,7 +156,9 @@ public class NoteService {
             List<returnableNote> listRetNotes = new ArrayList<returnableNote>();
             for (Notes note : notes) {
                 listRetNotes.add(new returnableNote(note.getTitle(), note.getContenido(), note.getTags(),
-                        new returnableUser(note.getUsuario().getName(), note.getUsuario().getId()), note.getId(),
+                        new returnableUser(note.getUsuario().getName(), note.getUsuario().getId(),
+                                userService.checkIfAdmin(note.getUsuario().getId())),
+                        note.getId(),
                         note.getLikes()));
             }
             return listRetNotes;

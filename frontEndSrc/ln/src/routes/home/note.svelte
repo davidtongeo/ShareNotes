@@ -13,6 +13,13 @@
     function funHandler() {
         showFS = !showFS;
     }
+    function verifyUser(): null | undefined {
+        if (localStorage.getItem("user") === null) return null;
+    }
+    function getUser(): object {
+        if (verifyUser() === null) return {};
+        return JSON.parse(localStorage.getItem("user") as string);
+    }
 
     function getContent() {
         return props.pObject.content.toString().length > maxChar
@@ -53,6 +60,13 @@
         <img src={heartIcon} class="w-5 h-5 mr-4" alt="" />
         {props.pObject.like}
     </DefaultButton>
+    {console.log(props.pObject)}
+    {#if props.isAdmin || getUser().id == props.pObject.user.id}
+        <br />
+        <DefaultButton isWhite={null} onClickHandler={null}
+            >Eliminar</DefaultButton
+        >
+    {/if}
 </div>
 
 <style lang="scss">

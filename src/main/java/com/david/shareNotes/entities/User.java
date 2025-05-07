@@ -24,7 +24,7 @@ public class User {
         return emailPattern.matcher(email).matches();
     }
 
-    public boolean isAdmin;
+    private boolean isAdmin;
 
     public boolean isAdmin() {
         return isAdmin;

@@ -4,6 +4,13 @@
     import Note from "./note.svelte";
     import { scale } from "svelte/transition";
     let { asyncFunction, searchInput } = $props();
+    function verifyUser(): null | undefined {
+        if (localStorage.getItem("user") === null) return null;
+    }
+    function getUser(): object {
+        if (verifyUser() === null) return {};
+        return JSON.parse(localStorage.getItem("user") as string);
+    }
     function matchCase(inputText: string, iterable: any[], type: string) {
         switch (type.toLocaleLowerCase()) {
             case "tag": {
@@ -13,8 +20,6 @@
                 return fzf.find(inputText);
             }
             case "user": {
-                console.log(iterable[0].user);
-                console.log("Dnawdnajd");
                 const fzf = new Fzf(iterable, {
                     selector: (item) => item.user.username,
                 });
@@ -47,18 +52,20 @@
             {#each matchCase(searchInput
                     .toLocaleLowerCase()
                     .substring(1, searchInput.length), data, "user") as jsonComponent}
-                <Note pObject={jsonComponent.item}></Note>
+                <Note isAdmin={getUser().admin} pObject={jsonComponent.item}
+                ></Note>
             {/each}
         {:else}
             {#each matchCase(searchInput
                     .toLocaleLowerCase()
                     .substring(1, searchInput.length), data, "tag") as jsonComponent}
-                <Note pObject={jsonComponent.item}></Note>
+                <Note isAdmin={getUser().admin} pObject={jsonComponent.item}
+                ></Note>
             {/each}
         {/if}
     {:else}
         {#each data as jsonComponent}
-            <Note pObject={jsonComponent}></Note>
+            <Note isAdmin={getUser().admin} pObject={jsonComponent}></Note>
         {/each}
     {/if}
 {/await}

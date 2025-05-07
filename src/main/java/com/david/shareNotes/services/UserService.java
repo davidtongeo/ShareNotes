@@ -18,7 +18,7 @@ public class UserService {
     public returnableUser getUserById(Long id) throws Exception {
         try {
             User user = userRepo.findById(id).get();
-            return new returnableUser(user.getName(), user.getId());
+            return new returnableUser(user.getName(), user.getId(), user.isAdmin());
         } catch (Exception e) {
             throw new Exception("INTERNAL SERVER ERROR: cant find by id.");
         }
@@ -31,7 +31,7 @@ public class UserService {
             throw new Error("The email is already signed.");
         try {
             User repoUser = userRepo.save(user);
-            return new returnableUser(repoUser.getName(), repoUser.getId());
+            return new returnableUser(repoUser.getName(), repoUser.getId(), user.isAdmin());
         } catch (Exception e) {
             throw new Exception("INTERNAL SERVER ERROR, couldn't save to the database.");
         }
@@ -44,7 +44,7 @@ public class UserService {
             User foundedUser = userRepo.findUser(user.getName(), user.getPassword());
             if (foundedUser == null)
                 throw new Exception("No user was found.");
-            return new returnableUser(foundedUser.getName(), foundedUser.getId());
+            return new returnableUser(foundedUser.getName(), foundedUser.getId(), checkIfAdmin(foundedUser.getId()));
         } catch (Exception e) {
             throw new Exception("couldn't log-in.");
         }

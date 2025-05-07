@@ -53,7 +53,8 @@
                     class="bg-gray-200 w-full h-full rounded text-center mr-2"
                 />
             </div>
-            <ProfileContainer name={getUser().username}></ProfileContainer>
+            <ProfileContainer admin={getUser().admin} name={getUser().username}
+            ></ProfileContainer>
             {console.log(getUser())}
             <div
                 class="h-full w-1/2 bg-gray-200 flex flex-col items-center m-5 p-5"
