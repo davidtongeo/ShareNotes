@@ -21,7 +21,6 @@ public class PutController {
     }
 
     @PutMapping("/notes/{id}")
-    @ResponseBody
     public ResponseEntity<Object> updateNote(@PathVariable Long id, @RequestBody notesParam note) {
         try {
             returnableNote rNote = noteService.updateNote(id, note);

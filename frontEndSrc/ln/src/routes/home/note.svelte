@@ -7,6 +7,7 @@
     let carta = new Carta({ sanitizer: false, theme: "github-light" });
     import heartIcon from "$lib/assets/heartIcon.svg";
     import DefaultButton from "../defaultButton.svelte";
+    import { scale } from "svelte/transition";
     let maxChar = props.maxChar != null ? props.maxChar : 200;
     let showFS = $state(false);
     function funHandler() {
@@ -26,6 +27,7 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
+    transition:scale
     class="bg-gray-100 w-3/4 m-10 rounded hover:bg-blue-200 transition-colors ease-in-out duration-200 p-2 cursor-pointer"
     onclick={funHandler}
 >

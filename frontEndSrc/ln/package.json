@@ -24,6 +24,7 @@
 	"dependencies": {
 		"@tailwindcss/vite": "^4.1.4",
 		"carta-md": "^4.9.0",
+		"fzf": "^0.5.2",
 		"tailwindcss": "^4.1.4"
 	}
 }

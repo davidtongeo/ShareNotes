@@ -29,7 +29,6 @@ public class GetController {
     }
 
     @GetMapping("/notes")
-    @ResponseBody
     public ResponseEntity<Object> getAllNotes(@RequestBody(required = false) notesParam note) {
         if (note == null) {
             // No parameters were found.
@@ -51,7 +50,6 @@ public class GetController {
     }
 
     @GetMapping("/notes/{id}")
-    @ResponseBody
     public ResponseEntity<Object> getSingleNote(@PathVariable Long id) {
         try {
             returnableNote note = noteService.getNoteById(id);
@@ -62,7 +60,6 @@ public class GetController {
     }
 
     @GetMapping("/profile/{id}")
-    @ResponseBody
     public ResponseEntity<Object> getpf(@PathVariable Long id) {
         try {
             returnableUser user = userService.getUserById(id);

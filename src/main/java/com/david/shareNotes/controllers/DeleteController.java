@@ -17,7 +17,6 @@ public class DeleteController {
     }
 
     @DeleteMapping("notes/{id}")
-    @ResponseBody
     public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
         try {
             noteService.deleteNote(id);

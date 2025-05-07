@@ -7,6 +7,7 @@
     import shareNotes from "$lib/assets/sn.png";
     import search from "$lib/assets/search.svg";
     import LoadNote from "./loadNote.svelte";
+    import { scale } from "svelte/transition";
 
     async function getAllPost() {
         const response = await fetch("http://localhost:8080/notes", {

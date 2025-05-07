@@ -1,44 +1,64 @@
 <script lang="ts">
     import { ssrExportAllKey } from "vite/module-runner";
+    import { Fzf } from "fzf";
     import Note from "./note.svelte";
-
+    import { scale } from "svelte/transition";
     let { asyncFunction, searchInput } = $props();
-    function matchCase(
-        obj: string[] | null | undefined,
-        input: string[] | null | undefined,
-    ): boolean {
-        return obj.some(
-            (el) =>
-                typeof el === "string" &&
-                input.some(
-                    (eld) =>
-                        typeof eld === "string" &&
-                        el
-                            .toLocaleLowerCase()
-                            .startsWith(eld.toLocaleLowerCase()),
-                ),
-        );
+    function matchCase(inputText: string, iterable: any[], type: string) {
+        switch (type.toLocaleLowerCase()) {
+            case "tag": {
+                const fzf = new Fzf(iterable, {
+                    selector: (item) => (item.tags ?? []).join(" "),
+                });
+                return fzf.find(inputText);
+            }
+            case "user": {
+                console.log(iterable[0].user);
+                console.log("Dnawdnajd");
+                const fzf = new Fzf(iterable, {
+                    selector: (item) => item.user.username,
+                });
+                return fzf.find(inputText);
+            }
+            default: {
+                const fzf = new Fzf(iterable, {
+                    selector: (item) => item.title,
+                });
+                return fzf.find(inputText);
+            }
+        }
     }
 </script>
 
 {#await asyncFunction()}
     <p>Loading...</p>
 {:then data: any}
-    {#if searchInput != "" || searchInput != null}
+    {#if searchInput != ""}
         {#if !searchInput.startsWith("#")}
-            {#each data as jsonComponent}
-                {#if jsonComponent.title
-                    .toLocaleLowerCase()
-                    .startsWith(searchInput.toLocaleLowerCase())}
-                    <Note pObject={jsonComponent}></Note>
-                {/if}
-            {/each}
-        {:else}
-            {#each data as jsonComponent}
-                {#if matchCase(jsonComponent.tags, searchInput.split())}
-                    <Note pObject={jsonComponent}></Note>
-                {/if}
+            {#each matchCase(searchInput.toLocaleLowerCase(), data, "default") as jsonComponent}
+                {console.log(jsonComponent)}
+                {#if jsonComponent !== null}
+                    <Note pObject={jsonComponent.item}></Note>
+                {:else}{/if}
             {/each}
         {/if}
+        {#if searchInput.startsWith("@")}
+            {console.log("user")}
+            {#each matchCase(searchInput
+                    .toLocaleLowerCase()
+                    .substring(1, searchInput.length), data, "user") as jsonComponent}
+                <Note pObject={jsonComponent.item}></Note>
+            {/each}
+        {:else}
+            {#each matchCase(searchInput
+                    .toLocaleLowerCase()
+                    .substring(1, searchInput.length), data, "tag") as jsonComponent}
+                <Note pObject={jsonComponent.item}></Note>
+            {/each}
+        {/if}
+    {:else}
+        {#each data as jsonComponent}
+            <Note pObject={jsonComponent}></Note>
+        {/each}
     {/if}
 {/await}
