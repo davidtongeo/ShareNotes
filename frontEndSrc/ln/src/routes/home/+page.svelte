@@ -43,7 +43,6 @@
     {#if verifyUser() !== null}
         <div class="w-full h-full flex items-center flex-col">
             <div class="w-full min-h-20 bg-blue-500 flex items-center flex-col">
-                <!-- <img class="w-30 m-2" src={shareNotes} alt="" /> -->
                 <ShareNotesBtn></ShareNotesBtn>
             </div>
             <div class="w-1/2 h-10 m-5 flex flex-row">

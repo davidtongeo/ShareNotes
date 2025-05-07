@@ -10,7 +10,7 @@ Not really a frontend guy, first time ever using a frontend framework.
 - [x] Added tags to the frontend.
 - [x] Using fzf for the searchbar.
 - [ ] add comments as a function of a note.
-- [ ] Endpoint for creating a note.
+- [x] Endpoint for creating a note.
 
 # Members
 

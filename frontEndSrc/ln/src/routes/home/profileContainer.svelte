@@ -8,6 +8,9 @@
         localStorage.removeItem("user");
         location.href = "/";
     }
+    function createNote() {
+        location.href = "/home/mknote";
+    }
 </script>
 
 <div
@@ -15,7 +18,7 @@
 >
     <img src={brain} alt="" class="rounded-full w-1/5 border-3 mb-2" />
     <h1 class="text-white font-bold">Hola! {name}</h1>
-    <DefaultButton isWhite="true" onClickHandler={null}
+    <DefaultButton isWhite="true" onClickHandler={createNote}
         >Crear Apunte</DefaultButton
     >
     <div class="mt-1 mb-1"></div>
