@@ -51,7 +51,11 @@ public class PostController {
     @PostMapping("/like")
     public ResponseEntity<Object> performLike(@RequestBody likeType like) {
         try {
+            System.out.println("###########");
+            System.out.println(like.getIdUser());
+            System.out.println(like.getIdNote());
             noteService.likeNote(like.getIdUser(), like.getIdNote());
+            System.out.println("Gets called aswell");
         } catch (Exception e) {
             ResponseEntity.internalServerError().body("Cant perform like");
         }

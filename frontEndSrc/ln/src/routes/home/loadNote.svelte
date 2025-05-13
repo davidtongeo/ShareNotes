@@ -3,7 +3,7 @@
     import { Fzf } from "fzf";
     import Note from "./note.svelte";
     import { scale } from "svelte/transition";
-    let { asyncFunction, searchInput } = $props();
+    let { asyncFunction, searchInput, update } = $props();
     function verifyUser(): null | undefined {
         if (localStorage.getItem("user") === null) return null;
     }
@@ -33,6 +33,9 @@
             }
         }
     }
+    async function refetch() {
+        update();
+    }
 </script>
 
 {#await asyncFunction()}
@@ -43,7 +46,8 @@
             {#each matchCase(searchInput.toLocaleLowerCase(), data, "default") as jsonComponent}
                 {console.log(jsonComponent)}
                 {#if jsonComponent !== null}
-                    <Note pObject={jsonComponent.item}></Note>
+                    <Note pObject={jsonComponent.item} frefetch={refetch()}
+                    ></Note>
                 {:else}{/if}
             {/each}
         {/if}
@@ -52,20 +56,30 @@
             {#each matchCase(searchInput
                     .toLocaleLowerCase()
                     .substring(1, searchInput.length), data, "user") as jsonComponent}
-                <Note isAdmin={getUser().admin} pObject={jsonComponent.item}
+                <Note
+                    isAdmin={getUser().admin}
+                    pObject={jsonComponent.item}
+                    frefetch{refetch}
                 ></Note>
             {/each}
         {:else}
             {#each matchCase(searchInput
                     .toLocaleLowerCase()
                     .substring(1, searchInput.length), data, "tag") as jsonComponent}
-                <Note isAdmin={getUser().admin} pObject={jsonComponent.item}
+                <Note
+                    isAdmin={getUser().admin}
+                    pObject={jsonComponent.item}
+                    frefetch={refetch}
                 ></Note>
             {/each}
         {/if}
     {:else}
         {#each data as jsonComponent}
-            <Note isAdmin={getUser().admin} pObject={jsonComponent}></Note>
+            <Note
+                isAdmin={getUser().admin}
+                pObject={jsonComponent}
+                frefetch={refetch}
+            ></Note>
         {/each}
     {/if}
 {/await}

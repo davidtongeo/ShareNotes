@@ -8,7 +8,11 @@
     import search from "$lib/assets/search.svg";
     import LoadNote from "./loadNote.svelte";
     import { scale } from "svelte/transition";
+    let reloadKey = $state(0);
 
+    function reload() {
+        reloadKey = reloadKey + 1;
+    }
     async function getAllPost() {
         const response = await fetch("http://localhost:8080/notes", {
             method: "GET",
@@ -59,8 +63,13 @@
             <div
                 class="h-full w-1/2 bg-gray-200 flex flex-col items-center m-5 p-5"
             >
-                <LoadNote asyncFunction={getAllPost} searchInput={input}
-                ></LoadNote>
+                {#key reloadKey}
+                    <LoadNote
+                        asyncFunction={getAllPost}
+                        searchInput={input}
+                        update={reload}
+                    ></LoadNote>
+                {/key}
             </div>
         </div>
     {/if}

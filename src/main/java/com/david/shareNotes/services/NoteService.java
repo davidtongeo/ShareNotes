@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.david.shareNotes.entities.Like;
 import com.david.shareNotes.entities.Notes;
-import com.david.shareNotes.entities.User;
 import com.david.shareNotes.repositories.LikeRepository;
 import com.david.shareNotes.repositories.NoteRepository;
 import com.david.shareNotes.repositories.UserRepository;
@@ -52,47 +50,12 @@ public class NoteService {
         }
     }
 
-    public returnableNote likeNote(Long user, Long note) throws Exception {
-        Like returnedLike;
-        Notes returnedNote;
+    public void likeNote(Long userId, Long noteId) throws Exception {
         try {
-            returnedLike = likeService.returnLike(user, note);
+            likeService.like(userId, noteId);
         } catch (Exception e) {
-            throw new Exception(e);
+            throw new Exception("Cant perform like, refer to Likenote: NoteService");
         }
-        if (returnedLike == null) {
-            // find the note
-            try {
-                returnedNote = noteRepo.findById(note).get();
-            } catch (Exception e) {
-                throw new Exception("Couldn't find any note with that id: " + note);
-            }
-            returnedNote.setLikes(returnedNote.getLikes() + 1);
-            // save the note
-            try {
-                returnedNote = noteRepo.save(returnedNote);
-                User toSaveToLikeUser;
-                try {
-                    toSaveToLikeUser = userRepo.findById(user).get();
-                } catch (Exception e) {
-                    throw new Exception("Can't find a user with that id for the like, id: " + user);
-                }
-                Like toSaveLike = new Like(toSaveToLikeUser, returnedNote);
-                try {
-                    likeRepo.save(toSaveLike);
-                } catch (Exception e) {
-                    throw new Exception("Cant save the like. refer to the NoteService");
-                }
-            } catch (Exception e) {
-                throw new Exception("Cant save the note with id: " + note);
-            }
-        } else {
-            throw new Exception("Can't like the note with the id: " + note);
-        }
-        return new returnableNote(returnedNote.getTitle(), returnedNote.getContenido(), returnedNote.getTags(),
-                new returnableUser(returnedNote.getUsuario().getName(), returnedNote.getUsuario().getId(),
-                        userService.checkIfAdmin(returnedNote.getUsuario().getId())),
-                returnedNote.getId(), returnedNote.getLikes(), commentService.getByCommentId(returnedNote.getId()));
     }
 
     public List<returnableNote> getAllNotes() throws Exception {
@@ -105,7 +68,7 @@ public class NoteService {
                         new returnableUser(note.getUsuario().getName(), note.getUsuario().getId(),
                                 userService.checkIfAdmin(note.getUsuario().getId())),
                         note.getId(),
-                        note.getLikes(), commentService.getByCommentId(note.getId()));
+                        likeService.getAmount(note.getId()), commentService.getByCommentId(note.getId()));
                 listRetNotes.add(rNote);
             }
             return listRetNotes;

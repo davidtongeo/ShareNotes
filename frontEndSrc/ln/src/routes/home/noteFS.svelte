@@ -7,6 +7,7 @@
     import { fade, scale } from "svelte/transition";
     import heartIcon from "$lib/assets/heartIcon.svg";
     import { goto } from "$app/navigation";
+    import { json } from "@sveltejs/kit";
     let props = $props();
     let maxChar = props.maxChar != null ? props.maxChar : 200;
     function verifyUser(): null | undefined {
@@ -16,6 +17,7 @@
         if (verifyUser() === null) return {};
         return JSON.parse(localStorage.getItem("user") as string);
     }
+    let content = $state("");
     async function del() {
         const resp = await fetch(
             `http://localhost:8080/notes/${props.pObject.id}`,
@@ -24,6 +26,35 @@
         if (resp.status == 204) {
             alert("Note deleted");
             location.reload();
+        }
+    }
+    async function comment() {
+        const resp = await fetch(`http://localhost:8080/comment`, {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({
+                userId: getUser().id,
+                noteId: props.pObject.id,
+                content: content,
+            }),
+        });
+        if (resp.status == 201) {
+            alert("Created");
+            props.refetch();
+        }
+    }
+    async function like() {
+        const resp = await fetch("http://localhost:8080/like", {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({
+                idUser: getUser().id,
+                idNote: props.pObject.id,
+            }),
+        });
+        if (resp.status == 200) {
+            alert("Done");
+            props.refetch();
         }
     }
 </script>
@@ -71,10 +102,36 @@
             {/await}
         </div>
         <br />
-        <DefaultButton isWhite={null} onClickHandler={null}>
+        <DefaultButton isWhite={null} onClickHandler={like}>
             <img src={heartIcon} class="w-5 h-5 mr-4" alt="" />
             {props.pObject.like}
         </DefaultButton>
+        <br />
+        <h1>Comenta!</h1>
+        <div>
+            <input
+                bind:value={content}
+                type="text"
+                placeholder="Hola"
+                class="border-blue-100 border-3 rounded mb-2 w-full"
+            />
+            <DefaultButton isWhite={"false"} onClickHandler={comment}
+                >publicar</DefaultButton
+            >
+            {console.log(props.pObject.comments)}
+            <br />
+            {#each [...props.pObject.comments].reverse() as item}
+                <div class="w-full bg-gray-100 p-2">
+                    <a href={`/home/pf/${item.user.id}`} class="text-blue-500"
+                        >{item.user.username}</a
+                    >
+                    <p class="whitespace-pre-wrap break-words">
+                        {item.content}
+                    </p>
+                </div>
+                <br />
+            {/each}
+        </div>
     </div>
 </div>
 
