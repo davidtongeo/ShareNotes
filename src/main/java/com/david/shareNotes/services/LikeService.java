@@ -26,4 +26,12 @@ public class LikeService {
         }
         return obtainedLike;
     }
+
+    public void unLike(Long user, Long note) throws Exception {
+        try {
+            likeRepo.unlike(user, note);
+        } catch (Exception e) {
+            throw new Exception("Can't delete the like, refer to the LikeRepository");
+        }
+    }
 }

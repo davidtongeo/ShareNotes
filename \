@@ -25,17 +25,11 @@ public class PostController {
     private final UserService userService;
     private final NoteService noteService;
     private final CommentService commentService;
-    // we need the repository to get the raw users, its bad usage of the MVC tho.
-    private final UserRepository userRepository;
-    private final NoteRepository noteRepository;
 
-    public PostController(UserService userService, NoteService noteService, CommentService commentService,
-            UserRepository userRepository, NoteRepository noteRepository) {
+    public PostController(UserService userService, NoteService noteService, CommentService commentService) {
         this.userService = userService;
         this.noteService = noteService;
         this.commentService = commentService;
-        this.noteRepository = noteRepository;
-        this.userRepository = userRepository;
     }
 
     @PostMapping("/loggin")
@@ -88,8 +82,8 @@ public class PostController {
     private ResponseEntity<Object> uploadComment(@RequestBody commentParam body) {
         try {
             var result = commentService.sendComment(
-                    userRepository.findById(body.getUserId()).get(),
-                    noteRepository.findById(body.getNoteId()).get(),
+                    userService.getUserById(body.getUserId()),
+                    noteService.getNoteById(body.getNoteId()),
                     body.getContent());
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (Exception e) {

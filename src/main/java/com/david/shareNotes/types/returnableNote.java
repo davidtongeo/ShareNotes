@@ -2,6 +2,8 @@ package com.david.shareNotes.types;
 
 import java.util.List;
 
+import com.david.shareNotes.entities.Comment;
+
 public class returnableNote {
     private Long id;
 
@@ -14,6 +16,15 @@ public class returnableNote {
     private List<String> tags;
     private returnableUser user;
     private Long like;
+    private List<returnableComment> comments;
+
+    public List<returnableComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<returnableComment> comments) {
+        this.comments = comments;
+    }
 
     public Long getLike() {
         return like;
@@ -35,13 +46,15 @@ public class returnableNote {
         return tags;
     }
 
-    public returnableNote(String title, String content, List<String> tags, returnableUser user, Long id, Long like) {
+    public returnableNote(String title, String content, List<String> tags, returnableUser user, Long id, Long like,
+            List<returnableComment> comments) {
         this.title = title;
         this.content = content;
         this.tags = tags;
         this.user = user;
         this.id = id;
         this.like = like;
+        this.comments = comments;
     }
 
 }

@@ -10,4 +10,7 @@ import com.david.shareNotes.entities.Like;
 public interface LikeRepository extends JpaRepository<Like, Long> {
     @Query("SELECT l FROM Like l WHERE l.user.id = :userId AND l.note.id = :noteId")
     public Optional<Like> findByUserIdAndNoteId(Long userId, Long noteId);
+
+    @Query("DELETE FROM Like l WHERE l.user.id = :userId AND l.note.id = :noteId")
+    public void unlike(Long userId, Long noteId);
 }

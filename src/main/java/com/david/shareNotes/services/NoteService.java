@@ -22,14 +22,16 @@ public class NoteService {
     LikeRepository likeRepo;
     LikeService likeService;
     UserService userService;
+    CommentService commentService;
 
     public NoteService(UserRepository repo, NoteRepository noteRepo, LikeRepository likeRepo, LikeService likeService,
-            UserService userService) {
+            UserService userService, CommentService commentService) {
         this.userRepo = repo;
         this.noteRepo = noteRepo;
         this.likeRepo = likeRepo;
         this.likeService = likeService;
         this.userService = userService;
+        this.commentService = commentService;
     }
 
     public returnableNote saveNote(notesParam note) throws Exception {
@@ -43,7 +45,7 @@ public class NoteService {
                     repoNote.getTags(),
                     new returnableUser(repoNote.getUsuario().getName(), repoNote.getUsuario().getId(),
                             userService.checkIfAdmin(repoNote.getUsuario().getId())),
-                    repoNote.getId(), repoNote.getLikes());
+                    repoNote.getId(), repoNote.getLikes(), commentService.getByCommentId(repoNote.getId()));
             return retNote;
         } catch (Exception e) {
             throw new Exception("Couldn't make the Note entity");
@@ -90,7 +92,7 @@ public class NoteService {
         return new returnableNote(returnedNote.getTitle(), returnedNote.getContenido(), returnedNote.getTags(),
                 new returnableUser(returnedNote.getUsuario().getName(), returnedNote.getUsuario().getId(),
                         userService.checkIfAdmin(returnedNote.getUsuario().getId())),
-                returnedNote.getId(), returnedNote.getLikes());
+                returnedNote.getId(), returnedNote.getLikes(), commentService.getByCommentId(returnedNote.getId()));
     }
 
     public List<returnableNote> getAllNotes() throws Exception {
@@ -103,7 +105,7 @@ public class NoteService {
                         new returnableUser(note.getUsuario().getName(), note.getUsuario().getId(),
                                 userService.checkIfAdmin(note.getUsuario().getId())),
                         note.getId(),
-                        note.getLikes());
+                        note.getLikes(), commentService.getByCommentId(note.getId()));
                 listRetNotes.add(rNote);
             }
             return listRetNotes;
@@ -119,7 +121,7 @@ public class NoteService {
                     new returnableUser(note.getUsuario().getName(), note.getUsuario().getId(),
                             userService.checkIfAdmin(note.getUsuario().getId())),
                     note.getId(),
-                    note.getLikes());
+                    note.getLikes(), commentService.getByCommentId(note.getId()));
         } catch (Exception e) {
             throw new Exception("couldn't find the note by the id");
         }
@@ -143,7 +145,7 @@ public class NoteService {
             return new returnableNote(savedNode.getTitle(), savedNode.getContenido(), savedNode.getTags(),
                     new returnableUser(savedNode.getUsuario().getName(), savedNode.getUsuario().getId(),
                             userService.checkIfAdmin(savedNode.getUsuario().getId())),
-                    savedNode.getId(), savedNode.getLikes());
+                    savedNode.getId(), savedNode.getLikes(), commentService.getByCommentId(savedNode.getId()));
         } catch (Exception e) {
             throw new Exception("Couldn't update the note for the id: " + id);
         }
@@ -159,7 +161,7 @@ public class NoteService {
                         new returnableUser(note.getUsuario().getName(), note.getUsuario().getId(),
                                 userService.checkIfAdmin(note.getUsuario().getId())),
                         note.getId(),
-                        note.getLikes()));
+                        note.getLikes(), commentService.getByCommentId(note.getId())));
             }
             return listRetNotes;
         } catch (Exception e) {

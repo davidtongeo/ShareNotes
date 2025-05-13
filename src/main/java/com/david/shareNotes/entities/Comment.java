@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -14,6 +15,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Lob
     private String content;
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
@@ -21,6 +23,15 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "id_note", nullable = false)
     private Notes note;
+
+    public Comment() {
+    }
+
+    public Comment(User user, Notes note, String content) {
+        this.user = user;
+        this.note = note;
+        this.content = content;
+    }
 
     public Long getId() {
         return id;
