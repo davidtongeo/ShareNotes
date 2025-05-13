@@ -4,16 +4,6 @@ Source code for ShareNotes, an app that let you take notes and share them. (Scho
 ## Warning 
 Not really a frontend guy, first time ever using a frontend framework.
 
-# Todo
-
-- [x] Admin type user.
-- [x] Added tags to the frontend.
-- [x] Using fzf for the searchbar.
-- [ ] add comments as a function of a note.
-- [ ] like function
-- [x] errase note
-- [x] Endpoint for creating a note.
-
 # Members
 
 * Roynhel Navarro. 
